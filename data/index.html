@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App</title>
+  <style>
+    body {
+          background-color: #f8f9fa;
+          font-family: Arial, sans-serif;
+          margin:0 auto;
+          text-align:center;
+          width: 100%;
+        }
+
+        #sensorData {
+          padding: 10px;
+          background-color: #f8f9fa;
+          border: none;
+          font-family: Arial, sans-serif;
+          font-size: 16px;
+        }
+
+        .container {
+          margin-top: 50px;
+        }
+
+        .weather-card {
+          padding: 20px;
+          min-width: 200px;
+          max-width: 300px;
+          background-color: #ffffff;
+          border-radius: 8px;
+          box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .weather-card h2 {
+          margin-bottom: 20px;
+          text-align: center;
+        }
+
+        .form-group {
+          margin-bottom: 20px;
+        }
+
+        .form-control {
+          width: 100%;
+          padding: 10px;
+          border: 1px solid #ced4da;
+          border-radius: 4px;
+          box-sizing: border-box;
+          margin-bottom: 8px;
+        }
+
+        .btn-primary {
+          width: 100%;
+          padding: 10px;
+          border: none;
+          border-radius: 4px;
+          background-color: #007bff;
+          color: #ffffff;
+          cursor: pointer;
+          transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+          background-color: #0056b3;
+        }
+
+        #weather-info {
+          display: none;
+          margin-top: 30px;
+          margin:10px auto;
+          text-align: center;
+          align-items: center;
+
+        }
+
+        .weather-info-bg {
+          background-color: #f8f9fa;
+          padding: 15px;
+          border-radius: 8px;
+          box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #weather-info h6 {
+          margin-top: 0;
+          text-align: center;
+          text-transform: uppercase;
+        }
+
+        #city-name {
+          text-align: center;
+          font-size: bigger;
+        }
+
+        #temperature {
+          text-align: center;
+          font-size: 36px;
+          margin-top: 10px;
+          margin-bottom: 20px;
+        }
+
+        .weather-details {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 20px;
+          font-size: smaller;
+        }
+
+        .weather-details p {
+          margin: 0;
+          padding: 10px;
+        }
+
+        .text-center {
+          text-align: center;
+        }
+
+        .mt-3 {
+          margin-top: 5px;
+        }
+
+        .row {
+          display: flex;
+          flex-wrap: wrap;
+          margin-right: -8px;
+          margin-left: -8px;
+        }
+
+        .col {
+          flex-basis: 0;
+          flex-grow: 1;
+          max-width: 100%;
+          padding-right: 8px;
+          padding-left: 8px;
+        }
+  </style>
+</head>
+<body>
+  <div class="container">
+        <div class="row justify-content-center">
+
+            <div style="display: flex; flex-direction:column; flex:1 ; align-items:center; justify-content:center; ">
+                <div class="row" style="display: flex; align-items:center; justify-content:end; flex:1; width:100%; margin-right:20px">
+                    <div id="sensorData"></div>
+                </div>
+                <div class="weather-card">
+                <h2>Weather App</h2>
+                <div class="form-group">
+                    <form id="weatherForm">
+                      <div class="row">
+                        <div class="col">
+                          <input type="text" id="latitude" name="latitude" placeholder="Enter latitude" class="form-control">
+                        </div>
+                        <div class="col">
+                          <input type="text" id="longitude" name="longitude" placeholder="Enter longitude" class="form-control">
+                        </div>
+                      </div>
+                      <button type="submit" class="btn btn-primary btn-block mt-3">Get Weather</button>
+                    </form>
+                </div>
+
+                <div id="weather-info">
+                  <div class="card-container">
+                    <div class="weather-info-bg">
+                        <h6><strong><span id="city-name"></span></strong></h6>
+                        <h2><span id="temperature"></span> °C</h2>
+                        <div class="weather-details">
+                        <p><img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA7AAAAOwBeShxvQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAUSSURBVFiFvZdLbFRlFIC/c+88OtN2Su0DWiilpYDUQiAmJAaRqERNiIkxEhKUBYlEWRjDwsTEYAIYExIMLowLFxhdGMPGiDGoRIxU8UFDC6XQUkDKtFA6Q18z7Tzu3Htc3JbSdvpC6lndnOf3n///z58L8yTae+tVjdyM6M3mlHa17Z/KT+aleCSSj2lFcBw/VgJSQ0qlN0fksfREX2M+ADAyFYCfU39AwyVQFcL+lVldHyR/OKyBMzd139kuXTWFiwCobYNlj2gyWWvNGaBF1TcU0BO5Pj3Qm9Dmvzt13Vxz/CcAo9f5BNjs90BJLt6+lPP7+W4t/V8AWqP6nqjsjlvwxmlovAshvwQjCW08pmrOK8DliL4IetBR+PaakGcKRy7CoAVeg/KSG3pi3gBaenWpiH4OyE8dQjgGJT54xAv7GiDXDxllS32Hvv3QAVTVMG39CihqjkJTZMxWFRRshUONsDAXGbL08K9hXfFQAVqj7EXYGEvDz+Hxc0uAlblCSz/82AmhHDxpS399aADtd3S5iB5Uhe+uC8nMZB+/4Xbiy3awHbAcyhoThR9PcvR4iuYMYJt6GAg03IGbsan9SnwQMOFAI6jCYk98yz2jaYLHD1bqqKpOqjclQFtUnwVeGsrAb7dmfjKqAkLHEAwmhin1pV2Sqx3oxSsQCIFjLaOr9fCsAVR1P0B9p5CyZ6yPd4SxOph0P85egOthtP4s+s1J8PhA7W2zAmiL6gaEjYMpOB8d0xf6YU0xhHyTY0aPhznarNgwGCPpe/tGlOKfFYAjzl6Ahh5B1dUVB2DHo0p5nrJztZLvAxF4vU4JeCDHAK8B5/pG6DY9jq6sgnW1yM6XwbYAaZxYyzNR0d6uflt1q+3AhftWX1ekNNwR/uoGq0JZVQj9SRjOQGJk+dUB4bN/gmwtT1Ce48PYvd01JOOgkiKT2j5jB5wingHyw3HGXbukLeR53Xbk+yBlw/pSpbFn7IAW+WBJjsm2M0Wc6A6StMBODtvYmWa8wRVStb5/RgC1nScArvePP/lNEVgWgjfXKiEfdMehNAhtfePjF3jAUYMPL4doziziVLJ6QCpq18rimvDEWpBlC0RYqkBvarw+mYGjl4Q8L8TT8HSFcj4Kjk5O6jchkgKfCbZDQbbCU3cAKQMYsiY7q0IsDR4D6orhQlTYsAieX6YUB8avKqOuv6PTD7tsxoHRVUwltUVwYxDWFEFlSIkMC9tX6r2YjLo3AsAUpp0ikwFUuwAKc6YOWl+qnOsRKkNKfZdwrgeiCVgYdO1phTzTBTGE4bkBYPwCULMgy+YCZbluUGcMepNQU6AU+t050Zdy2z6QgbpCSFjgM5ymOQHkJjkJDFaFGLevo9KXguPX3RtyulMoz4Ptq5TTXUIsDX0ZF2JHDcQt8Jjmp9MBZH1l2u7q+6q6vyMGX7eNTcOZxFFoGlSeWgSv1UA8TfeWaqNsupisJzRp8ZHA1cp8eG6pIrP4f1Lg2rBSnQ97aqEvheMX2TVT3JSpr0R1tYP+CYTa++GHG5L1aoI7FTuSyrpieKsOOgeVHNM4tKlS3n1gAIDWXl2Lo8eBSsuBxh640i/cHnLfgJQDGFDghx01yuIg3B7G9hhyZPNSeWem4jMCAFzt1lLL63wgKru4b3IOpKHgvmc5loa4Rdhnyp6NS+T72RSfFcCotPRojcfgFUVfAJbbKqWOMpDKaH/Sph1Hjj1ZKV/MNt+o/AtnsSkB3QaHvQAAAABJRU5ErkJggg=='> <span id="humidity"></span>%</p>
+                        <p><img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA7AAAAOwBeShxvQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAVJSURBVFiF5ZdbbFRVFIa/tc+ZmRYpBYu09VbUttNQI5ooRgXrlBIUL6gEfVLwhqYaISZiMCHUSxRvESXGEG9Bg5GaiIC3RDoDBIuXB5FYmGm5qE2BghZo6XQ6M2cvH9BkHKUdHH3R//X8/1rfXtl7Zx/4v0vyLRBp0zLretOM6qFDQffzW0S8v/LN37L7bIwuEpgJWpbuHTj48w/dXXkBbOrQizxrPwU+Az0PMJJ2podq5Vimb8HWXVeguhYoAUj3JejbcxBf+egjJh+AtLUPKrq4PujMrQ+6U0B2qWMbMz33f7WzBNXm7OZFlaU4Pily8wEQ6FMkGI5q0A/7BtX7SERmZXr81r1d4fTs5qbAxSYGbV4TSKZNk8BZYN8ddKgSkfNV+CHTo0oou7kzIkCiN47rOtvymsDVtdID3AoQ2aHnq8OdiqnLshX9oXmBy8CRPtSz1g0E5p4UQEvMex7hQNqYt6dXykGA5jb1l7jeHMUuUfSehmrZk5np6dhf0d/dS0l1GalkikR8AOOYVKCwcO7yhtodJwXgemaFdW2jz7PbwzHvKEIfaitAWhzPhOomSEemf9Yzax/45cdDFaeOH/eTuGYEEPcF/Bv9btHClxrO7Ybf7oFPOjRQ6HmzrUidESlWtE+Vb101H9fVyN5sEFWVjVEqjMuY3lOIXX+6xLM9s5d+dG08ObjWH3DvWvPIzJUnWpREdqauUmPeAr4W1XUY7cZKmRoJoUwF2YXYV6XLWRsKSXqoCX3SoYEZVTIIcMOyDaVOPFmz5tEZm4bKSEvMrlEjzzZUydbsj02qZkq7Nx1Mo6ATFd50HfNGXaV0Zvq2RLUoiX0SI8H6anP1UA3/BJCrMbJTx6ux84DbgWPAZhV6RDkHCAHvpRJm0fSJ0v+3ATbv0PKU8SaLkTGKplSd70f3se3iiyX1u0dVJdLOBeBNVGQUaFcq7Wz67UietAQgHNUgok+BXqoQQegSZQToRSCVwAdWzAvZR2w4Nas6Y9vt/FTCrDjRZNxILH2jYpcL+hj7nFvrszZaJKZjwc4xajeGo94Ga8yTuYB8vluLnXZdJSJxfw8vn3AC4ai3SsQ8EQpKdMMeLZWUnW2UWiv0G/SbwAhn3eVnyUBrpxYO9Nt7RXgICIuYZaFq2fanVbep/zTHm63IUxhWhqrMEhHREwLA8d1e12EXqXK/Cs0CO0TxqXI5Qp3C61ODThNAa6cWDgzYuwXmofhQWhE6FVSgBrgSkW+slcUNNbJ9uEkd3wMx7xWQ8cm03Ja9mSJ7dbRNccHUatmcHY7s0kq13iRRKVdQVHenXGfr79d0Toq0pxpaYt721k4tbInppEiHnjlcpqmpyZ219MPrc24yhIyquQHhtcQxJoh4z6i1reFoeuZQobZRE0oTSe+Dm59e/3y+ABKOei8p7J1a4ywDCMfSM8A01gfNdUMFb1q6fnJyMBkZNa74YOnEiu8UTaDyld/nrnxu0jkHcgaIxHSyql3lOOZGXwHRRNwuF+VwqMZ5eLjwHau/DB/ZeyhUVnsmgZKRxwvCYYQ5L15WtT4XABMKyhYRXZhWuzoRt/sVHB/m8VzC/qKCseNqyoh3HWbwl+PvUIUxVmle8EX7hbnUcAFCQXc1sDqXQKYE+j3HUBws52hsPwCBkpEIFKjI08A1w9XI602o4qxTz6IGioPlf5iEwLTGSNvIfxWgp8+8IK7Tn+iNIz4nG8LxF5ix/yrA+7fUJk0hMwRSA0eOgZFMCE90ZPdwNfL+NQO4r2XbGSRptp53CWJc42mi/8DRfe/MC1X+E/X/2/oVlw98T7OjSDwAAAAASUVORK5CYII='> <span id="wind-speed"></span> m/s</p>
+                        </div>
+                        <p class="text-center"><strong><span id="description-weather"></span></strong></p>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <script>
+    document.getElementById('weatherForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      var lat = document.getElementById('latitude').value;
+      var lon = document.getElementById('longitude').value;
+      fetchWeather(lat, lon);
+    });
+
+    window.onload = function() {
+      fetchSensorData();
+    }
+
+    function fetchWeather(latitude, longitude) {
+      fetch('/getWeather?lat=' + latitude + '&lon=' + longitude)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('city-name').innerText = data.name;
+          document.getElementById('temperature').innerText = data.main.temp;
+          document.getElementById('humidity').innerText = data.main.humidity;
+          document.getElementById('wind-speed').innerText = data.wind.speed;
+          document.getElementById('description-weather').innerText = data.weather[0].description;
+          document.getElementById('weather-info').style.display = 'flex';
+        })
+        .catch(error => {
+          console.error('Error fetching weather data:', error);
+        });
+    }
+
+    function fetchSensorData() {
+      fetch('/getSensorData')
+      .then(response => response.json())
+      .then(data => {
+
+        var humidity = data.humidity;
+        var temperature = data.temperature;
+
+        updateSensorData(humidity, temperature);
+      })
+      .catch(error => {
+        console.error('Error fetching sensor data:', error);
+      });
+    }
+
+    function updateSensorData(humidity, temperature) {
+      document.getElementById("sensorData").innerHTML = `
+        <p><img src='data:image/png;base64,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'> ${temperature} °C</p>
+        <p><img src='data:image/png;base64,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'> ${humidity} %</p>
+      `;
+    }
+
+    setInterval(fetchSensorData, 5000);
+  </script>
+</body>
+</html>
