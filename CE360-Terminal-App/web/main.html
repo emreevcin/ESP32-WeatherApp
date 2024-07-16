@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .btn-reset {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center mb-4">Weather App</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">City</th>
+                    <th scope="col">Temperature</th>
+                </tr>
+            </thead>
+            <tbody id="weather-table">
+                <!-- Weather data will be populated here -->
+            </tbody>
+        </table>
+        <button class="btn btn-danger btn-reset float-right" onclick="clearDatabase()">Reset</button>
+    </div>
+    <script src="/eel.js"></script>
+    <script>
+        function clearDatabase() {
+            eel.clear_database();
+        }
+        function updateTable(weatherData) {
+            var tableBody = document.getElementById("weather-table");
+            tableBody.innerHTML = "";
+            for (var i = 0; i < weatherData.length; i++) {
+                var row = `<tr>
+                            <td>${weatherData[i][0]}</td>
+                            <td>${weatherData[i][1]}</td>
+                            <td>${weatherData[i][2]}</td>
+                        </tr>`;
+                tableBody.innerHTML += row;
+            }
+        }
+        eel.expose(updateTable);
+    </script>
+</body>
+</html>
